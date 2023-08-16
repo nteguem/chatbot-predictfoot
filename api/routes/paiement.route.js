@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const paymentHandler = require('../controllers/paiement.controllers');
+const paymentHandler = require('../controllers/paiement.controller');
 
 /**
  * Set up the paiement routes and link them to the corresponding controller functions.
@@ -20,5 +20,4 @@ const setupPaiementRoutes = (app, client) => {
 
   };
   
-  // Export the 'setupPaiementRoutes' function to be used in other files.
   module.exports = { setupPaiementRoutes };

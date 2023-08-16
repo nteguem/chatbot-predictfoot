@@ -5,7 +5,13 @@ const bodyParser = require("body-parser");
 const cors = require('cors');
 const createError = require("http-errors");
 const cookieParser = require("cookie-parser");
+const dbConnect = require('./api/config/dbConnect');
+
 const { initializeWhatsAppClient, handleIncomingMessages } = require('./api/helpers/whatappsHandler');
+
+
+// Connection to MongoDB
+dbConnect();
 
 // App initialization
 const app = express();
@@ -41,7 +47,7 @@ client.initialize();
 
 
 // App Routes
-app.use('/api/v1/', appRoutes(client));
+app.use('/api/v1/', appRoutes());
 
 // Custom 404 error handler
 app.use((req, res, next) => {
@@ -59,6 +65,6 @@ app.use((err, req, res, next) => {
 });
 
 // Start the app
-app.listen(process.env.PORT || 7000, () => {
+app.listen(process.env.PORT || 5000, () => {
   console.log("Server started");
 });
