@@ -7,13 +7,20 @@ const JWT_SECRET = process.env.JWT_SECRET; // Remplacez ceci par une clé secrè
 
 async function createUser(userData) {
     try {
-        const newUser = new User(userData);
-        await newUser.save();
-        return { success: true, message: 'Utilisateur créé avec succès' };
+      const hashedPassword = await bcrypt.hash(userData.password, 10); // Hashage du mot de passe
+      
+      const newUser = new User({
+        phoneNumber: userData.phoneNumber,
+        password: hashedPassword, // Utilisation du mot de passe hashé
+      });
+  
+      await newUser.save();
+      return { success: true, message: 'Utilisateur créé avec succès' };
     } catch (error) {
-        return { success: false, error: error.message };
+      return { success: false, error: error.message };
     }
-}
+  }
+  
 
 async function login(phoneNumber, password) {
     try {
