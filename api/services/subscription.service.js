@@ -1,6 +1,55 @@
 // services/subscription.service.js
 const User = require('../models/user.model');
 
+
+async function createSubscription(subscriptionData) {
+  try {
+    const newSubscription = new Subscription(subscriptionData);
+    await newSubscription.save();
+    return { success: true, message: 'Forfait créé avec succès' };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+}
+
+async function getAllSubscriptions() {
+  try {
+    const subscriptions = await Subscription.find();
+    return { success: true, subscriptions };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+}
+
+async function updateSubscription(subscriptionId, updatedData) {
+  try {
+    const updatedSubscription = await Subscription.findByIdAndUpdate(subscriptionId, updatedData, { new: true });
+    
+    if (!updatedSubscription) {
+      return { success: false, message: 'Forfait non trouvé' };
+    }
+
+    return { success: true, subscription: updatedSubscription };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+}
+
+async function deleteSubscription(subscriptionId) {
+  try {
+    const deletedSubscription = await Subscription.findByIdAndDelete(subscriptionId);
+    
+    if (!deletedSubscription) {
+      return { success: false, message: 'Forfait non trouvé' };
+    }
+
+    return { success: true, message: 'Forfait supprimé avec succès' };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+}
+
+
 async function findActiveSubscribers() {
   try {
     const activeSubscribers = await User.find({ 'subscriptions.expirationDate': { $gt: new Date() } }).populate('subscriptions.subscription');
@@ -19,7 +68,7 @@ async function hasActiveSubscription(phoneNumber) {
     }
   }
   
-  async function getAllSubscriptions(phoneNumber) {
+  async function getAllSubscriptionsUser(phoneNumber) {
     try {
       const user = await User.findOne({ phoneNumber }).populate('subscriptions.subscription');
       
@@ -56,8 +105,12 @@ async function hasActiveSubscription(phoneNumber) {
   }
 
 module.exports = {
-  findActiveSubscribers,
+  createSubscription,
   getAllSubscriptions,
+  updateSubscription,
+  deleteSubscription,
+  findActiveSubscribers,
+  getAllSubscriptionsUser,
   hasActiveSubscription,
-  addSubscriptionToUser
+  addSubscriptionToUser,
 };

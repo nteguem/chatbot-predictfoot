@@ -1,5 +1,49 @@
 const subscriptionService = require('../services/subscription.service');
 
+const createSubscription = async (req, res) => {
+    const subscriptionData = req.body;
+    const response = await subscriptionService.createSubscription(subscriptionData);
+    
+    if (response.success) {
+      res.json({ message: response.message });
+    } else {
+      res.status(500).json({ message: 'Erreur lors de la création du forfait', error: response.error });
+    }
+  };
+  
+  const getAllSubscriptions = async (req, res) => {
+    const response = await subscriptionService.getAllSubscriptions();
+    
+    if (response.success) {
+      res.json(response.subscriptions);
+    } else {
+      res.status(500).json({ message: 'Erreur lors de la récupération des forfaits', error: response.error });
+    }
+  };
+  
+  const updateSubscription = async (req, res) => {
+    const subscriptionId = req.params.subscriptionId;
+    const updatedData = req.body;
+    const response = await subscriptionService.updateSubscription(subscriptionId, updatedData);
+    
+    if (response.success) {
+      res.json(response.subscription);
+    } else {
+      res.status(404).json({ message: response.message });
+    }
+  };
+  
+  const deleteSubscription = async (req, res) => {
+    const subscriptionId = req.params.subscriptionId;
+    const response = await subscriptionService.deleteSubscription(subscriptionId);
+    
+    if (response.success) {
+      res.json({ message: response.message });
+    } else {
+      res.status(404).json({ message: response.message });
+    }
+  };
+
 const getActiveSubscribers = async (req, res) => {
     const response = await subscriptionService.findActiveSubscribers();
     if (response.success) {
@@ -20,9 +64,9 @@ const checkActiveSubscription = async (req, res) => {
     }
 };
 
-const getAllSubscriptions = async (req, res) => {
+const getAllSubscriptionsUser = async (req, res) => {
     const phoneNumber = req.params.phoneNumber;
-    const response = await subscriptionService.getAllSubscriptions(phoneNumber);
+    const response = await subscriptionService.getAllSubscriptionsUser(phoneNumber);
 
     if (response.success) {
         res.json(response.subscriptions);
@@ -44,7 +88,11 @@ const addSubscriptionToUser = async (req, res) => {
 
 module.exports = {
     getActiveSubscribers,
-    getAllSubscriptions,
+    getAllSubscriptionsUser,
     checkActiveSubscription,
-    addSubscriptionToUser
+    addSubscriptionToUser,
+    createSubscription,
+    getAllSubscriptions,
+    updateSubscription,
+    deleteSubscription
 };
