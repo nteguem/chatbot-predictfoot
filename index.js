@@ -36,14 +36,14 @@ app.use((req, res, next) => {
   next();
 });
 
-// Create instance whatapp
-const client = initializeWhatsAppClient();
+// // Create instance whatapp
+// const client = initializeWhatsAppClient();
 
-//Handle incoming messages from the chatbot using the modular function.
-handleIncomingMessages(client);
+// //Handle incoming messages from the chatbot using the modular function.
+// handleIncomingMessages(client);
 
-// Launch WhatsApp client
-client.initialize();
+// // Launch WhatsApp client
+// client.initialize();
 
 
 // App Routes
