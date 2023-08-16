@@ -33,7 +33,7 @@ async function hasActiveSubscription(phoneNumber) {
     }
   }
 
-  async function addSubscription(userId, subscriptionId, subscriptionDate, expirationDate) {
+  async function addSubscriptionToUser(userId, subscriptionId, subscriptionDate, expirationDate) {
     try {
       const user = await User.findById(userId);
       const subscription = await Subscription.findById(subscriptionId);
@@ -59,5 +59,5 @@ module.exports = {
   findActiveSubscribers,
   getAllSubscriptions,
   hasActiveSubscription,
-  addSubscription
+  addSubscriptionToUser
 };

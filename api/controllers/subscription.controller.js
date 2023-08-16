@@ -31,9 +31,9 @@ const getAllSubscriptions = async (req, res) => {
     }
 };
 
-const addSubscription = async (req, res) => {
+const addSubscriptionToUser = async (req, res) => {
     const { userId, subscriptionId, subscriptionDate, expirationDate } = req.body;
-    const response = await subscriptionService.addSubscription(userId, subscriptionId, subscriptionDate, expirationDate);
+    const response = await subscriptionService.addSubscriptionToUser(userId, subscriptionId, subscriptionDate, expirationDate);
     
     if (response.success) {
       res.json({ message: response.message });
@@ -46,5 +46,5 @@ module.exports = {
     getActiveSubscribers,
     getAllSubscriptions,
     checkActiveSubscription,
-    addSubscription
+    addSubscriptionToUser
 };

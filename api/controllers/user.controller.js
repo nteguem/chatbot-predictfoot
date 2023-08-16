@@ -19,7 +19,7 @@ const loginUser = async (req, res) => {
     const token = userService.generateAccessToken(response.user._id);
     res.json({ token, user: response.user });
   } else {
-    res.status(401).json({ message: response.message });
+    res.status(401).json(response);
   }
 };
 
