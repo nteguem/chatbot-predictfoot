@@ -52,8 +52,9 @@ async function deleteSubscription(subscriptionId) {
 
 async function findActiveSubscribers() {
   try {
-    const activeSubscribers = await User.find({ 'subscriptions.expirationDate': { $gt: new Date() } }).select('-password').populate('subscriptions.subscription');
-    return { success: true, data: activeSubscribers };
+   // const activeSubscribers = await User.find({ 'subscriptions.expirationDate': { $gt: new Date() } }).select('-password').populate('subscriptions.subscription');
+   const activeSubscribers = await User.find({ 'subscriptions.expirationDate': { $gt: new Date() } }).select('phoneNumber');
+   return { success: true, data: activeSubscribers };
   } catch (error) {
     return { success: false, error: error.message };
   }
