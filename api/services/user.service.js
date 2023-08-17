@@ -36,7 +36,7 @@ async function login(phoneNumber, password) {
             return { success: false, message: 'Mot de passe incorrect' };
         }
 
-        return { success: true, user };
+        return { success: true, user};
     } catch (error) {
         return { success: false, error: error.message };
     }
