@@ -16,7 +16,7 @@ const setupSubscriptionRoutes = (app) => {
   router.get('/active-subscribers', subscriptionHandler.getActiveSubscribers);
   router.get('/has-active-subscription/:phoneNumber', subscriptionHandler.checkActiveSubscription);
   router.get('/all-subscriptions/:phoneNumber', subscriptionHandler.getAllSubscriptionsUser);
-  router.post('/add-subscription', subscriptionHandler.addSubscriptionToUser);
+  router.post('/add-subscription', subscriptionHandler.addSubscriptionToUser); 
 };
 
 module.exports = { setupSubscriptionRoutes };
