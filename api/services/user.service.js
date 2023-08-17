@@ -7,20 +7,20 @@ const JWT_SECRET = process.env.JWT_SECRET; // Remplacez ceci par une clé secrè
 
 async function createUser(userData) {
     try {
-      const hashedPassword = await bcrypt.hash(userData.password, 10); // Hashage du mot de passe
-      
-      const newUser = new User({
-        phoneNumber: userData.phoneNumber,
-        password: hashedPassword, // Utilisation du mot de passe hashé
-      });
-  
-      await newUser.save();
-      return { success: true, message: 'Utilisateur créé avec succès' };
+        const hashedPassword = await bcrypt.hash(userData.password, 10); // Hashage du mot de passe
+
+        const newUser = new User({
+            phoneNumber: userData.phoneNumber,
+            password: hashedPassword, // Utilisation du mot de passe hashé
+        });
+
+        await newUser.save();
+        return { success: true, message: 'Utilisateur créé avec succès' };
     } catch (error) {
-      return { success: false, error: error.message };
+        return { success: false, error: error.message };
     }
-  }
-  
+}
+
 
 async function login(phoneNumber, password) {
     try {
@@ -58,7 +58,26 @@ async function getUser(userId) {
 
 async function updateUser(userId, updatedData) {
     try {
-        const updatedUser = await User.findByIdAndUpdate(userId, updatedData, { new: true });
+        if (updatedData.password) {
+            // Hashage du nouveau mot de passe
+            updatedData.password = await bcrypt.hash(updatedData.password, 10);
+        }
+
+        // Mise à jour de l'utilisateur en fonction des champs fournis dans updatedData
+        const updateFields = {};
+        if (updatedData.phoneNumber) {
+            updateFields.phoneNumber = updatedData.phoneNumber;
+        }
+        if (updatedData.password) {
+            updateFields.password = updatedData.password;
+        }
+
+        // Vérification s'il y a des champs à mettre à jour
+        if (Object.keys(updateFields).length === 0) {
+            return { success: false, message: 'Aucune donnée de mise à jour fournie' };
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(userId, updateFields, { new: true });
 
         if (!updatedUser) {
             return { success: false, message: 'Utilisateur non trouvé' };
@@ -73,8 +92,6 @@ async function updateUser(userId, updatedData) {
 function generateAccessToken(userId) {
     return jwt.sign({ userId }, JWT_SECRET, { expiresIn: '1h' });
 }
-
-
 
 module.exports = {
     createUser,

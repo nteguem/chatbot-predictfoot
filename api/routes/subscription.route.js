@@ -10,7 +10,7 @@ const setupSubscriptionRoutes = (app) => {
   // Mount the 'router' to handle routes with the base path '/subscription'.
   app.use("/subscription", router);
   router.post('/create-subscription', subscriptionHandler.createSubscription);
-  router.get('/all-subscriptions', subscriptionHandler.getAllSubscriptions);
+  router.get('/all-subscriptions', subscriptionHandler.getAllSubscriptions); 
   router.put('/update-subscription/:subscriptionId', subscriptionHandler.updateSubscription);
   router.delete('/delete-subscription/:subscriptionId', subscriptionHandler.deleteSubscription);
   router.get('/active-subscribers', subscriptionHandler.getActiveSubscribers);

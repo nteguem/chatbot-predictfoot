@@ -1,4 +1,5 @@
 // services/subscription.service.js
+const Subscription = require('../models/subscription.model')
 const User = require('../models/user.model');
 
 
