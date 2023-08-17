@@ -30,6 +30,7 @@ async function login(phoneNumber, password) {
             return { success: false, message: 'Utilisateur non trouvé' };
         }
 
+
         const passwordMatch = await bcrypt.compare(password, user.password);
 
         if (!passwordMatch) {
