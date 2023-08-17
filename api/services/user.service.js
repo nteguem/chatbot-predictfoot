@@ -44,7 +44,7 @@ async function login(phoneNumber, password) {
 
 async function getUser(userId) {
     try {
-        const user = await User.findById(userId);
+        const user = await User.findById(userId).select('-password').populate('subscriptions.subscription');
 
         if (!user) {
             return { success: false, message: 'Utilisateur non trouvé' };

@@ -75,18 +75,18 @@ const getAllSubscriptionsUser = async (req, res) => {
     }
 };
 
-const addSubscriptionToUser = async (req, res) => {
-    const { userId, subscriptionId, subscriptionDate, expirationDate } = req.body;
-    const response = await subscriptionService.addSubscriptionToUser(userId, subscriptionId, subscriptionDate, expirationDate);
+  const addSubscriptionToUser = async (req, res) => {
+    const { phoneNumber, subscriptionName, subscriptionDate, expirationDate } = req.body;
+    const response = await subscriptionService.addSubscriptionToUser(phoneNumber, subscriptionName, subscriptionDate, expirationDate);
     
     if (response.success) {
-      res.json({ message: response.message });
+      res.json({ message: response.message, subscription: response.subscription });
     } else {
       res.status(500).json({ message: 'Erreur lors de l\'ajout de la souscription', error: response.error });
     }
   };
 
-module.exports = {
+module.exports = { 
     getActiveSubscribers,
     getAllSubscriptionsUser,
     checkActiveSubscription,

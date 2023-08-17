@@ -1,6 +1,5 @@
-// services/subscription.service.js
-const Subscription = require('../models/subscription.model')
 const User = require('../models/user.model');
+const Subscription = require('../models/subscription.model');
 
 
 async function createSubscription(subscriptionData) {
@@ -53,7 +52,7 @@ async function deleteSubscription(subscriptionId) {
 
 async function findActiveSubscribers() {
   try {
-    const activeSubscribers = await User.find({ 'subscriptions.expirationDate': { $gt: new Date() } }).populate('subscriptions.subscription');
+    const activeSubscribers = await User.find({ 'subscriptions.expirationDate': { $gt: new Date() } }).select('-password').populate('subscriptions.subscription');
     return { success: true, data: activeSubscribers };
   } catch (error) {
     return { success: false, error: error.message };
@@ -83,27 +82,34 @@ async function hasActiveSubscription(phoneNumber) {
     }
   }
 
-  async function addSubscriptionToUser(userId, subscriptionId, subscriptionDate, expirationDate) {
+
+  async function addSubscriptionToUser(phoneNumber, subscriptionName, subscriptionDate, expirationDate) {
     try {
-      const user = await User.findById(userId);
-      const subscription = await Subscription.findById(subscriptionId);
+      const user = await User.findOne({ phoneNumber }); // Recherche de l'utilisateur par numéro de téléphone
+      const subscription = await Subscription.findOne({ name: subscriptionName }); // Recherche du forfait par nom
   
       if (!user || !subscription) {
         return { success: false, message: 'Utilisateur ou forfait non trouvé' };
       }
   
       user.subscriptions.push({
-        subscription: subscriptionId,
+        subscription: subscription._id,
         subscriptionDate,
         expirationDate,
       });
   
       await user.save();
-      return { success: true, message: 'Souscription ajoutée avec succès' };
+  
+      // Récupérer l'objet complet de l'abonnement depuis la base de données
+      const addedSubscription = await Subscription.findById(subscription._id);
+  
+      return { success: true, message: 'Souscription ajoutée avec succès', subscription: addedSubscription };
     } catch (error) {
       return { success: false, error: error.message };
     }
   }
+
+
 
 module.exports = {
   createSubscription,
