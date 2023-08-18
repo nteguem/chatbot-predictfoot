@@ -43,7 +43,7 @@ const handleIncomingMessages = (client) => {
       welcomeStatus[msg.from] = true;
     } else if (msg.body.toLowerCase() === subscribeKeyword && !msg.isGroupMsg) {
 
-      if (msg.body.toLowerCase() === subscribeKeyword && !msg.isGroupMsg) {
+      if (msg.body.toLowerCase() === subscribeKeyword && !msg.isGroupMsg) { 
         const allSubscriptionsResponse = await getAllSubscriptions();
         if (allSubscriptionsResponse.success) {
           const subscriptions = allSubscriptionsResponse.subscriptions;
