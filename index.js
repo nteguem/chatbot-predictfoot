@@ -15,10 +15,6 @@ const { initializeWhatsAppClient, handleIncomingMessages } = require('./api/help
 // Connection to MongoDB
 dbConnect(); 
 
-// Planification Tasks
-scheduleTask("0 9 * * *", () => notification.sendWarningNotification()); 
-scheduleTask("0 9 * * *", () => notification.sendConfirmationNotification());
-
 // App initialization
 const app = express();
 app.use(express.json());
@@ -50,6 +46,10 @@ handleIncomingMessages(client);
 
 // Launch WhatsApp client
 client.initialize();
+
+// Planification Tasks
+scheduleTask("27 00 * * *", () => notification.sendWarningNotification(client));
+scheduleTask("0 9 * * *", () => notification.sendConfirmationNotification());
 
 
 // App Routes
