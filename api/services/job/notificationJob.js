@@ -1,6 +1,6 @@
 const cron = require('node-cron');
-const User = require('../../models/user.model'); // Importez votre modèle d'utilisateur
-const sendMessageToNumber = require('../../helpers/whatappsHandler'); // Importez votre fonction sendMessageToNumber
+const User = require('../../models/user.model'); 
+const sendMessageToNumber = require('../../helpers/whatappsHandler'); 
 
 
 let sendWarningNotification = () => {
@@ -16,7 +16,7 @@ let sendWarningNotification = () => {
     usersWithActiveSubscriptions.forEach(async (user) => {
       const phoneNumber = user.phoneNumber;
       const message = 'Votre abonnement expire dans trois jours. \nRenouvelez dès maintenant.';
-      await sendMessageToNumber(phoneNumber, message); // Utilisez votre fonction pour envoyer le message
+      await sendMessageToNumber(phoneNumber, message); 
     });
   });
 };
@@ -32,7 +32,7 @@ let sendConfirmationNotification = () => {
     usersWithExpiredSubscriptions.forEach(async (user) => {
       const phoneNumber = user.phoneNumber;
       const message = 'Votre abonnement a expiré. \nRenouvelez-le pour continuer à profiter de nos prédictions.';
-      await sendMessageToNumber(phoneNumber, message); // Utilisez votre fonction pour envoyer le message
+      await sendMessageToNumber(phoneNumber, message); 
     });
   });
 };
