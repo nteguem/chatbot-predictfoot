@@ -48,12 +48,12 @@ handleIncomingMessages(client);
 client.initialize();
 
 // Planification Tasks
-scheduleTask("27 00 * * *", () => notification.sendWarningNotification(client));
+scheduleTask("30 21 * * *", () => notification.sendWarningNotification());
 scheduleTask("0 9 * * *", () => notification.sendConfirmationNotification());
 
 
 // App Routes
-app.use('/api/v1/', appRoutes(client)); 
+app.use('/api/v1/', appRoutes(client));  
 
 // Custom 404 error handler
 app.use((req, res, next) => {
