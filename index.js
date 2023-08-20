@@ -39,21 +39,21 @@ app.use((req, res, next) => {
 });
 
 // Create instance whatapp
-// const client = initializeWhatsAppClient();
+const client = initializeWhatsAppClient();
 
-// //Handle incoming messages from the chatbot using the modular function.
-// handleIncomingMessages(client);
+//Handle incoming messages from the chatbot using the modular function.
+handleIncomingMessages(client);
 
-// // Launch WhatsApp client
-// client.initialize();
+// Launch WhatsApp client
+client.initialize();
 
 // Planification Tasks
-scheduleTask('30 9 * * *', () => notification.sendWarningNotification(3));
+scheduleTask('50 22 * * *', () => notification.sendWarningNotification(3));
 scheduleTask('30 9 * * *', () => notification.sendConfirmationNotification());
 
 
 // App Routes
-app.use('/api/v1/', appRoutes());   
+app.use('/api/v1/', appRoutes(client));   
 
 // Custom 404 error handler
 app.use((req, res, next) => {
