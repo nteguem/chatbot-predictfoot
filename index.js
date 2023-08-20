@@ -6,12 +6,11 @@ const cors = require('cors');
 const createError = require("http-errors");
 const cookieParser = require("cookie-parser");
 const dbConnect = require('./api/config/dbConnect');
-
 const { initializeWhatsAppClient, handleIncomingMessages } = require('./api/helpers/whatappsHandler');
 
 
 // Connection to MongoDB
-dbConnect();
+dbConnect(); 
 
 // App initialization
 const app = express();
