@@ -2,7 +2,7 @@ require('dotenv').config(); // Load environment variables from the .env file
 const User = require('../models/user.model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
+const {hasActiveSubscription} = require('./subscription.service')
 const JWT_SECRET = process.env.JWT_SECRET; // Remplacez ceci par une clé secrète sécurisée
 
 async function createUser(userData) {
@@ -42,6 +42,32 @@ async function login(phoneNumber, password) {
         return { success: false, error: error.message };
     }
 }
+
+async function userExistAndSubscribe(phoneNumber) {
+    try {
+        const cleanedPhoneNumber = phoneNumber.replace(/@c\.us$/, "");
+        const user = await User.findOne({"phoneNumber": cleanedPhoneNumber });
+
+        if (!user) {
+            await createUser({
+                'phoneNumber': cleanedPhoneNumber,
+                'password': process.env.DEFAULT_PASSWORD
+            });
+            
+            return { success: false, message: "User created successfully." };
+        } else {
+            const hasActiveSub = await  hasActiveSubscription(cleanedPhoneNumber);
+            if (hasActiveSub.hasActiveSubscription) {
+                return { success: true, message: "User has an active subscription." };
+            } else {
+                return { success: false, message: "User exists but doesn't have an active subscription." };
+            }
+        }
+    } catch (error) {
+        return { success: false, message: "An error occurred.", error: error.message };
+    }
+}
+
 
 async function getUser(userId) {
     try {
@@ -100,4 +126,5 @@ module.exports = {
     generateAccessToken,
     getUser,
     updateUser,
+    userExistAndSubscribe
 };
