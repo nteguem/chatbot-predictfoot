@@ -1,9 +1,14 @@
 const generatePDFBuffer = require('../helpers/pdfGenerator');
 const {sendMessageToNumber,sendMediaToNumber} = require("../helpers/whatappsHandler")
+const {addSubscriptionToUser} = require("../services/subscription.service")
+const moment = require('moment');
+
 
 async function handlePaymentSuccess(req, res , client) {
   try {
       const  {user,phone,operator,operator_transaction_id,item_ref,amount,first_name} = req.body
+      const dateSubscription = moment().format('YYYY-MM-DD');
+      const expirationDate = dateSubscription.add(first_name, 'days');
       // Créez un message de succès
       const successMessage = `Félicitations ! Votre paiement pour le forfait ${item_ref} a été effectué avec succès. Profitez de nos services premium ! Ci-joint la facture de paiement du forfait.`;
       // Envoyez le message de succès au destinataire
@@ -15,9 +20,8 @@ async function handlePaymentSuccess(req, res , client) {
     const pdfName = 'invoice.pdf';
     const documentType = 'application/pdf'
 
-    // Envoyez le PDF en tant que document
-    await sendMediaToNumber(client,req.body.user, documentType, pdfBase64, pdfName);
-
+    await sendMediaToNumber(client,req.body.user, documentType, pdfBase64, pdfName);// Envoyez le PDF en tant que document
+    await addSubscriptionToUser(req.body.user, item_ref, dateSubscription, expirationDate) // ajouter la souscription a l'utilisateur
     res.status(200).send('Success');
   } catch (error) {
     console.error(error);
