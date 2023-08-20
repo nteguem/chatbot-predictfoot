@@ -17,7 +17,7 @@ async function sendWarningNotification(periodInDays) {
       console.log(phoneNumber)
       const message = 'Votre abonnement expire dans ' + periodInDays + ' jours. \nRenouvelez dès maintenant.';
       console.log(message)
-      await sendMessageToNumber(client, phoneNumber, message);
+      await sendMessageToNumber(client, phoneNumber, message); 
     }
   }
   

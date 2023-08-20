@@ -48,8 +48,8 @@ handleIncomingMessages(client);
 client.initialize();
 
 // Planification Tasks
-scheduleTask("30 21 * * *", () => notification.sendWarningNotification());
-scheduleTask("0 9 * * *", () => notification.sendConfirmationNotification());
+scheduleTask("30 9 * * *", () => notification.sendWarningNotification());
+scheduleTask("30 9 * * *", () => notification.sendConfirmationNotification());
 
 
 // App Routes
