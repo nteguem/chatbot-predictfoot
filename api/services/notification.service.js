@@ -1,4 +1,3 @@
-
 const User = require('../models/user.model'); 
 const {initializeWhatsAppClient, sendMessageToNumber} = require('../helpers/whatappsHandler');  
 const moment = require('moment');
@@ -12,13 +11,11 @@ async function sendWarningNotification(periodInDays) {
       'subscriptions.expirationDate': { $gt: today.toDate(), $lte: targetDate.toDate() },
     });
   
-    for (const user of usersWithActiveSubscriptions) {
+    usersWithActiveSubscriptions.forEach(async (user) => {
       const phoneNumber = user.phoneNumber;
-      console.log(phoneNumber)
       const message = 'Votre abonnement expire dans ' + periodInDays + ' jours. \nRenouvelez dès maintenant.';
-      console.log(message)
-      await sendMessageToNumber(client, phoneNumber, message); 
-    }
+      await sendMessageToNumber(client, phoneNumber, message);
+    });
   }
   
   async function sendConfirmationNotification() {
@@ -29,14 +26,14 @@ async function sendWarningNotification(periodInDays) {
       'subscriptions.expirationDate': { $lte: today.toDate() },
     });
   
-    for (const user of usersWithExpiredSubscriptions) {
+    usersWithExpiredSubscriptions.forEach(async (user) => {
       const phoneNumber = user.phoneNumber;
       const message = 'Votre abonnement a expiré. \nRenouvelez-le pour continuer à profiter de nos prédictions.';
       await sendMessageToNumber(client, phoneNumber, message);
-    }
-  }
-  
-  module.exports = {
-    sendWarningNotification,
-    sendConfirmationNotification
-  };
+    });
+  }  
+
+module.exports = {
+  sendWarningNotification,
+  sendConfirmationNotification
+};
