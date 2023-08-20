@@ -48,7 +48,7 @@ handleIncomingMessages(client);
 client.initialize();
 
 // Planification Tasks
-scheduleTask('50 22 * * *', () => notification.sendWarningNotification(3));
+scheduleTask('28 23 * * *', () => notification.sendWarningNotification(3));
 scheduleTask('30 9 * * *', () => notification.sendConfirmationNotification());
 
 

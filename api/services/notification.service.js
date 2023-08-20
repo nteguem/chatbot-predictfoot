@@ -3,8 +3,7 @@ const {initializeWhatsAppClient, sendMessageToNumber} = require('../helpers/what
 const moment = require('moment');
 const {hasActiveSubscription} = require('./subscription.service')
 
-// const client = initializeWhatsAppClient();
-// console.log(client)
+const client = initializeWhatsAppClient();
 
 async function sendWarningNotification(daysBeforeExpiration, client) {
     const today = moment();
