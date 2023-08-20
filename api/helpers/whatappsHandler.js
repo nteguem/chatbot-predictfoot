@@ -95,7 +95,7 @@ const handleIncomingMessages = (client) => {
         const paymentData = {
           service: process.env.PAYMENT_SERVICE_ID,
           phonenumber: msg.body.replace(/^\+/, '').replace(/\s/g, ''),
-          amount: 1,
+          amount: transactionSteps[msg.from]?.selectedForfait,
           user: msg.from, // Le numéro de téléphone WhatsApp de l'utilisateur
           first_name: transactionSteps[msg.from]?.selectedForfait == 2000 ? 7 : (transactionSteps[msg.from]?.selectedForfait == 5000 ? 30 : 90),
           item_ref: transactionSteps[msg.from]?.selectedForfait == 2000 ? "forfait vip hebdomadaire" : (transactionSteps[msg.from]?.selectedForfait == 5000 ? "forfait vip mensuel" : "forfait vip 3 mois"),
