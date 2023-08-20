@@ -6,6 +6,9 @@ const cors = require('cors');
 const createError = require("http-errors");
 const cookieParser = require("cookie-parser");
 const dbConnect = require('./api/config/dbConnect');
+const scheduleTask = require("./api/services/job/scheduleTask");
+const notification = require('./api/services/notification.service');
+
 const { initializeWhatsAppClient, handleIncomingMessages } = require('./api/helpers/whatappsHandler');
 
 
@@ -50,7 +53,7 @@ scheduleTask("30 9 * * *", () => notification.sendConfirmationNotification());
 
 
 // App Routes
-app.use('/api/v1/', appRoutes(client));
+app.use('/api/v1/', appRoutes(client));  
 
 // Custom 404 error handler
 app.use((req, res, next) => {
