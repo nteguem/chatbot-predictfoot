@@ -3,13 +3,13 @@ const notificationService = require('../notification.service'); // Assurez-vous 
 
 const ValidateWarningNotification = () => {
   cron.schedule('30 9 * * *', async () => {
-    await notificationService.sendWarningNotification(3);
+    await notificationService.sendWarningNotification(3, client);
   });
 };
 
 const ValidateConfirmationNotification = () => {
   cron.schedule('30 9 * * *', async () => {
-    await notificationService.sendConfirmationNotification();
+    await notificationService.sendConfirmationNotification(client);
   });
 };
 
