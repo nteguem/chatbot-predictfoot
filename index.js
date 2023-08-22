@@ -55,7 +55,7 @@ scheduleTask('30 9 * * *', () => notification.sendConfirmationNotification(clien
 // App Routes
 app.use('/api/v1/', appRoutes(client));   
 
-// Custom 404 error handler
+// Custom 404 error handler 
 app.use((req, res, next) => {
   next(createError(404, 'Route not found'));
 });

@@ -3,7 +3,8 @@ const { Client, MessageMedia } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const axios = require('axios');
 const { userExistAndSubscribe } = require('../services/user.service')
-const {findActiveSubscribers, getAllSubscriptions} = require('../services/subscription.service')
+const { findActiveSubscribers, getAllSubscriptions } = require('../services/subscription.service');
+const User = require('../models/user.model');
 const initializeWhatsAppClient = () => {
   const client = new Client({
     // Configurations du client WhatsApp
@@ -31,7 +32,7 @@ const handleIncomingMessages = (client) => {
   const welcomeStatusUser = {};
   // Utiliser un objet pour enregistrer l'état de bienvenue pour chaque administrateur
   const welcomeStatusAdmin = {};
-   // Utiliser un objet pour enregistrer les predictions
+  // Utiliser un objet pour enregistrer les predictions
   const savedPredictions = {};
 
   client.on('message', async (msg) => {
@@ -61,8 +62,8 @@ const handleIncomingMessages = (client) => {
         const utilisateursVIP = await findActiveSubscribers();
         const pronostics = savedPredictions[msg.from]; // Récupérer les pronostics enregistrés
         for (const utilisateur of utilisateursVIP.data) {
-          await sendMessageToNumber(client,utilisateur.phoneNumber+"@c.us", `Cher utilisateur VIP, voici les pronostics pour aujourd'hui :\n${pronostics}\nBonne chance !`);
-      }
+          await sendMessageToNumber(client, utilisateur.phoneNumber + "@c.us", `Cher utilisateur VIP, voici les pronostics pour aujourd'hui :\n${pronostics}\nBonne chance !`);
+        }
         const confirmationMessage = "Les pronostics ont été envoyés à tous les utilisateurs VIP avec succès.";
         msg.reply(confirmationMessage);
         // Réinitialiser les étapes et les données enregistrées
@@ -76,7 +77,7 @@ const handleIncomingMessages = (client) => {
     else {
       const subscribeKeyword = process.env.SUBSCRIBE_KEYWORD || 'subscribe';
 
-      if (!welcomeStatusUser[msg.from]) {
+      if (!welcomeStatusUser[msg.from]) {   
         // Envoyer le message de bienvenue la première fois
         const welcomeMessage = `🏆 Bienvenue sur PredictFoot ! 🌟\n\nPrêt à prédire les événements footballistiques passionnants ? Abonnez-vous dès maintenant en tapant *${subscribeKeyword}* pour accéder à nos prédictions premium. Ne manquez plus jamais un moment clé du jeu !\n\n⚽️ Rejoignez-nous et vivez le football autrement. Tapez simplement *${subscribeKeyword}* pour commencer.`;
         msg.reply(welcomeMessage);
@@ -100,20 +101,25 @@ const handleIncomingMessages = (client) => {
           }
         }
       } else if (/^\d+$/.test(msg.body) && transactionSteps[msg.from]?.step !== 'ask_phone_number') {
-        const forfaits = ['2000', '5000', '10000'];
-        const selectedForfaitIndex = parseInt(msg.body) - 1;
+        const allSubscriptionsResponse = await getAllSubscriptions();
+        if (allSubscriptionsResponse.success) {
+          const subscriptions = allSubscriptionsResponse.subscriptions;
+          const forfaits = subscriptions.map(subscription => subscription.price.toString());
 
-        if (selectedForfaitIndex >= 0 && selectedForfaitIndex < forfaits.length) {
-          const selectedForfait = forfaits[selectedForfaitIndex];
+          const selectedForfaitIndex = parseInt(msg.body) - 1;
 
-          // Enregistrer l'étape de la transaction pour cet utilisateur
-          transactionSteps[msg.from] = { step: 'ask_phone_number', selectedForfait };
+          if (selectedForfaitIndex >= 0 && selectedForfaitIndex < forfaits.length) {
+            const selectedForfait = forfaits[selectedForfaitIndex];
 
-          const phoneNumberMessage = 'Veuillez entrer votre numéro de téléphone pour la transaction Mobile Money (ex: 6xxxxxxxx):';
-          msg.reply(phoneNumberMessage);
-        } else {
-          const invalidForfaitMessage = 'Le numéro de forfait sélectionné est invalide. Réessayez en fournissant un numéro valide.';
-          msg.reply(invalidForfaitMessage);
+            // Enregistrer l'étape de la transaction pour cet utilisateur
+            transactionSteps[msg.from] = { step: 'ask_phone_number', selectedForfait };
+
+            const phoneNumberMessage = 'Veuillez entrer votre numéro de téléphone pour la transaction Mobile Money (ex: 6xxxxxxxx):';
+            msg.reply(phoneNumberMessage);
+          } else {
+            const invalidForfaitMessage = 'Le numéro de forfait sélectionné est invalide. Réessayez en fournissant un numéro valide.';
+            msg.reply(invalidForfaitMessage);
+          }
         }
       } else if (transactionSteps[msg.from]?.step === 'ask_phone_number') {
         let phoneNumber = msg.body.replace(/\s+/g, ''); // Supprimer les espaces

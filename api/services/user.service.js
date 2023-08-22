@@ -56,6 +56,15 @@ async function userExistAndSubscribe(phoneNumber) {
             
             return { success: false, message: "User created successfully." };
         } else {
+            // Incrémenter le champ engagementLevel à chaque communication
+            try {
+                user.engagementLevel = (user.engagementLevel || 0) + 1;
+                await user.save();
+                console.log(`Engagement level for user ${user.phoneNumber} incremented to ${user.engagementLevel}`);
+            } catch (error) {
+                console.error('Error incrementing engagement level for user:', error); 
+            }
+
             const hasActiveSub = await  hasActiveSubscription(cleanedPhoneNumber);
             if (hasActiveSub.hasActiveSubscription) {
                 return { success: true, message: "User has an active subscription." };
@@ -83,7 +92,7 @@ async function getUser(userId) {
     }
 }
 
-async function updateUser(userId, updatedData) {
+async function updateUser(phoneNumber, updatedData) {
     try {
         if (updatedData.password) {
             // Hashage du nouveau mot de passe
@@ -104,7 +113,7 @@ async function updateUser(userId, updatedData) {
             return { success: false, message: 'Aucune donnée de mise à jour fournie' };
         }
 
-        const updatedUser = await User.findByIdAndUpdate(userId, updateFields, { new: true });
+        const updatedUser = await User.findByIdAndUpdate(phoneNumber, updateFields, { new: true });
 
         if (!updatedUser) {
             return { success: false, message: 'Utilisateur non trouvé' };
