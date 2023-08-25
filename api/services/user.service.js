@@ -54,13 +54,12 @@ async function userExistAndSubscribe(phoneNumber) {
                 'password': process.env.DEFAULT_PASSWORD
             });
             
-            return { success: false, message: "User created successfully." };
+            return { success: false, message: "User created successfully." }; 
         } else {
             // Incrémenter le champ engagementLevel à chaque communication
             try {
                 user.engagementLevel = (user.engagementLevel || 0) + 1;
                 await user.save();
-                console.log(`Engagement level for user ${user.phoneNumber} incremented to ${user.engagementLevel}`);
             } catch (error) {
                 console.error('Error incrementing engagement level for user:', error); 
             }

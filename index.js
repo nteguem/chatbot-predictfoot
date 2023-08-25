@@ -6,10 +6,10 @@ const cors = require('cors');
 const createError = require("http-errors");
 const cookieParser = require("cookie-parser");
 const dbConnect = require('./api/config/dbConnect');
-const scheduleTask = require("./api/services/job/scheduleTask");
+const scheduleTask = require("./api/services/cron/scheduleTask");
 const notification = require('./api/services/notification.service');
 
-const { initializeWhatsAppClient, handleIncomingMessages } = require('./api/helpers/whatappsHandler');
+const { initializeWhatsAppClient, handleIncomingMessages } = require('./api/helpers/whatsApp/whatappsHandler');
 
 
 // Connection to MongoDB

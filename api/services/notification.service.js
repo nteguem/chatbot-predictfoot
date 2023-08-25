@@ -1,10 +1,10 @@
 const User = require('../models/user.model'); 
-const {sendMessageToNumber} = require('../helpers/whatappsHandler');  
+const {sendMessageToNumber} = require('../helpers/whatsApp/whatappsHandler');  
 const moment = require('moment');
 const {hasActiveSubscription} = require('./subscription.service')
 
-
-async function sendWarningNotification(daysBeforeExpiration, client) {
+ 
+async function sendWarningNotification(daysBeforeExpiration, client) { 
     const today = moment();
     const targetDate = moment(today).add(daysBeforeExpiration, 'days');
   
