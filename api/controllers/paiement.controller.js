@@ -1,5 +1,5 @@
 const generatePDFBuffer = require('../helpers/pdfGenerator');
-const {sendMessageToNumber,sendMediaToNumber} = require("../helpers/whatappsHandler")
+const {sendMessageToNumber,sendMediaToNumber} = require("../helpers/whatsApp/whatsappMessaging")
 const {addSubscriptionToUser} = require("../services/subscription.service")
 const moment = require('moment');
 

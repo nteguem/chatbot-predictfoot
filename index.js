@@ -9,7 +9,7 @@ const dbConnect = require('./api/config/dbConnect');
 const scheduleTask = require("./api/services/job/scheduleTask");
 const notification = require('./api/services/notification.service');
 
-const { initializeWhatsAppClient, handleIncomingMessages } = require('./api/helpers/whatappsHandler');
+const { initializeWhatsAppClient, handleIncomingMessages } = require('./api/helpers//whatsApp/whatappsHandler');
 
 
 // Connection to MongoDB

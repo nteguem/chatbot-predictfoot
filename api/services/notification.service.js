@@ -1,5 +1,5 @@
 const User = require('../models/user.model'); 
-const {sendMessageToNumber} = require('../helpers/whatappsHandler');  
+const {sendMessageToNumber} = require('../helpers/whatsApp/whatsappMessaging');  
 const moment = require('moment');
 const {hasActiveSubscription} = require('./subscription.service')
 
