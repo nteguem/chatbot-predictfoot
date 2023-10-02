@@ -14,9 +14,9 @@ const UserCommander = async (msg, transactionSteps) => {
   
         // Enregistrer l'état de bienvenue pour cet utilisateur
         welcomeStatusUser[msg.from] = true;
-      } else if (msg.body.toLowerCase() === subscribeKeyword && !msg.isGroupMsg) {
+      } else if (msg.body.toLowerCase().includes(subscribeKeyword) && !msg.isGroupMsg) {
   
-        if (msg.body.toLowerCase() === subscribeKeyword && !msg.isGroupMsg) {
+        if (msg.body.toLowerCase().includes(subscribeKeyword) && !msg.isGroupMsg) {
           const allSubscriptionsResponse = await getAllSubscriptions();
           if (allSubscriptionsResponse.success) {
             const subscriptions = allSubscriptionsResponse.subscriptions;
@@ -35,8 +35,10 @@ const UserCommander = async (msg, transactionSteps) => {
         if (allSubscriptionsResponse.success) {
           const subscriptions = allSubscriptionsResponse.subscriptions;  
           const selectedForfaitIndex = parseInt(msg.body) - 1;
-          if (selectedForfaitIndex >= 0 && selectedForfaitIndex <  subscriptions.length) {
+  
+          if (selectedForfaitIndex >= 0 && selectedForfaitIndex < subscriptions.length) {
             const selectedForfait = subscriptions[selectedForfaitIndex];
+  
             // Enregistrer l'étape de la transaction pour cet utilisateur
             transactionSteps[msg.from] = { step: 'ask_phone_number', selectedForfait };
   
@@ -57,7 +59,10 @@ const UserCommander = async (msg, transactionSteps) => {
   
         // // Vérifier le format du numéro de téléphone
         if (/^(?:\+237)?6(?:9|8|7|5)\d{7}$/.test(phoneNumber)) {
+          const allSubscriptionsResponse = await getAllSubscriptions();
+          const subscriptions = allSubscriptionsResponse.subscriptions;
           const selectedForfait = transactionSteps[msg.from]?.selectedForfait;
+  
           MonetBil.processPayment(msg, phoneNumber, selectedForfait, transactionSteps);
         }
         else if (/^(?:\+237)?6(?:6|2)\d{7}$/.test(phoneNumber)) {
