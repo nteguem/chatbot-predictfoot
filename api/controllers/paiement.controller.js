@@ -8,7 +8,7 @@ async function handlePaymentSuccess(req, res , client) {
   try {
       const  {user,phone,operator,operator_transaction_id,item_ref,amount,first_name} = req.body
       const dateSubscription = moment().format('YYYY-MM-DD');
-      const expirationDate = dateSubscription.add(first_name, 'days');
+      const expirationDate = moment(dateSubscription).add(first_name, 'days');
       // Créez un message de succès
       const successMessage = `Félicitations ! Votre paiement pour le forfait ${item_ref} a été effectué avec succès. Profitez de nos services premium ! Ci-joint la facture de paiement du forfait.`;
       // Envoyez le message de succès au destinataire

@@ -1,15 +1,13 @@
 const axios = require('axios');
 
-async function processPayment(msg, phoneNumber, selectedForfait, subscriptions, transactionSteps) {
-  const selectedSubscription = subscriptions.find(subscription => subscription.name === selectedForfait);
-
+async function processPayment(msg, phoneNumber, selectedForfait, transactionSteps) {
   const paymentData = {
     service: process.env.PAYMENT_SERVICE_ID,
     phonenumber: phoneNumber.replace(/^\+/, '').replace(/\s/g, ''),
-    amount: selectedSubscription?.price || selectedForfait,
+    amount: selectedForfait?.price,
     user: msg.from.replace(/@c\.us$/, ""),
-    first_name: selectedSubscription?.durationInDays,
-    item_ref: selectedSubscription?.description,
+    first_name: selectedForfait?.durationInDays,
+    item_ref: selectedForfait?.name,
   };
 
   const apiEndpoint = process.env.PAYMENT_API_ENDPOINT;

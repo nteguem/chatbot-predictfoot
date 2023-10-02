@@ -33,14 +33,10 @@ const UserCommander = async (msg, transactionSteps) => {
       } else if (/^\d+$/.test(msg.body) && transactionSteps[msg.from]?.step !== 'ask_phone_number') {
         const allSubscriptionsResponse = await getAllSubscriptions();
         if (allSubscriptionsResponse.success) {
-          const subscriptions = allSubscriptionsResponse.subscriptions;
-          const forfaits = subscriptions.map(subscription => subscription.price.toString());
-  
+          const subscriptions = allSubscriptionsResponse.subscriptions;  
           const selectedForfaitIndex = parseInt(msg.body) - 1;
-  
-          if (selectedForfaitIndex >= 0 && selectedForfaitIndex < forfaits.length) {
-            const selectedForfait = forfaits[selectedForfaitIndex];
-  
+          if (selectedForfaitIndex >= 0 && selectedForfaitIndex <  subscriptions.length) {
+            const selectedForfait = subscriptions[selectedForfaitIndex];
             // Enregistrer l'étape de la transaction pour cet utilisateur
             transactionSteps[msg.from] = { step: 'ask_phone_number', selectedForfait };
   
@@ -61,11 +57,8 @@ const UserCommander = async (msg, transactionSteps) => {
   
         // // Vérifier le format du numéro de téléphone
         if (/^(?:\+237)?6(?:9|8|7|5)\d{7}$/.test(phoneNumber)) {
-          const allSubscriptionsResponse = await getAllSubscriptions();
-          const subscriptions = allSubscriptionsResponse.subscriptions;
           const selectedForfait = transactionSteps[msg.from]?.selectedForfait;
-  
-          MonetBil.processPayment(msg, phoneNumber, selectedForfait, subscriptions, transactionSteps);
+          MonetBil.processPayment(msg, phoneNumber, selectedForfait, transactionSteps);
         }
         else if (/^(?:\+237)?6(?:6|2)\d{7}$/.test(phoneNumber)) {
           const invalidPhoneNumberMessage = 'Veuillez entrer uniquement un numéro MTN ou Orange.';
