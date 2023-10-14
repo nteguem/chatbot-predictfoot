@@ -10,12 +10,8 @@ const setupPaiementRoutes = (app, client) => {
     // Mount the 'router' to handle routes with the base path '/paiement'.
     app.use("/paiement", router);
   
-    router.post("/success", (req, res) => {
-      paymentHandler.handlePaymentSuccess(req, res, client); 
-     });
-  
-     router.post("/failure", (req, res) => {
-      paymentHandler.handlePaymentFailure(req, res, client); 
+    router.post("/notification", (req, res) => {
+      paymentHandler.handlePaymentNotification(req, res, client); 
      });
 
   };

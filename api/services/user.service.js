@@ -60,7 +60,6 @@ async function userExistAndSubscribe(phoneNumber) {
             try {
                 user.engagementLevel = (user.engagementLevel || 0) + 1;
                 await user.save();
-                console.log(`Engagement level for user ${user.phoneNumber} incremented to ${user.engagementLevel}`);
             } catch (error) {
                 console.error('Error incrementing engagement level for user:', error); 
             }
