@@ -8,6 +8,9 @@ const {UserCommander} = require("./user");
 
 const initializeWhatsAppClient = () => {
   const client = new Client({
+    puppeteer: {
+      args: ['--no-sandbox'],
+    },  
     // Configurations du client WhatsApp
   });
 

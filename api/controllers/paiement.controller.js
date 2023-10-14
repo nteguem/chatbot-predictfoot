@@ -6,7 +6,7 @@ const generatePDFBuffer = require('../helpers/pdfGenerator');
 
 async function handlePaymentSuccess(req, res, client) {
   try {
-    const {user,phone,operator_transaction_id,item_ref,amount,first_name} = req.body;
+    const {user,phone,operator_transaction_id,item_ref,amount,first_name,operator} = req.body;
     const dateSubscription = moment().format('YYYY-MM-DD');
     const expirationDate = moment(dateSubscription).add(first_name, 'days');
     const formattedExpirationDate = expirationDate.format('YYYY-MM-DD');
