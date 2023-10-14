@@ -7,8 +7,6 @@ const createError = require("http-errors");
 const cookieParser = require("cookie-parser");
 const dbConnect = require('./api/config/dbConnect');
 const scheduleTask = require("./api/services/job/scheduleTask");
-const notification = require('./api/services/notification.service');
-
 const { initializeWhatsAppClient, handleIncomingMessages } = require('./api/helpers//whatsApp/whatappsHandler');
 
 
@@ -47,9 +45,6 @@ handleIncomingMessages(client);
 // Launch WhatsApp client
 client.initialize();
 
-// Planification Tasks
-scheduleTask('0 11 * * *', () => notification.sendWarningNotification(3, client)); 
-scheduleTask('30 9 * * *', () => notification.sendConfirmationNotification(client));
 
 
 // App Routes
