@@ -15,16 +15,13 @@ async function handlePaymentSuccess(req, res, client) {
     const pdfBase64 = pdfBuffer.toString('base64');
     const pdfName = 'invoice.pdf';
     const documentType = 'application/pdf';
-
+    const prediction = await findActivePrediction();
+    const message = prediction ? prediction.predictions : successMessage;
     await Promise.all([
       sendMediaToNumber(client, `${user}@c\.us`, documentType, pdfBase64, pdfName),
       addSubscriptionToUser(user, item_ref, dateSubscription, formattedExpirationDate),
+      sendMessageToNumber(client, `${user}@c\.us`, message),
     ]);
-
-    const prediction = await findActivePrediction();
-    const message = prediction ? prediction.predictions : successMessage;
-    await sendMessageToNumber(client, `${user}@c\.us`, message);
-
     res.status(200).send('Success');
   } catch (error) {
     console.error(error);
