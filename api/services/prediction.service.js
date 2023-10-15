@@ -15,14 +15,17 @@ async function createPrediction(predictionData) {
 
 async function findActivePrediction() {
     try {
-        const today = moment().startOf('day'); 
-        const prediction = await Prediction.findOne({ date: today.toDate() }).exec();
-        return prediction || null;;
-      } catch (error) {
-        console.error('Erreur lors de la recherche de la prédiction :', error);
-        throw error;
-      }
-}
+      const today = moment().startOf('day'); 
+      const prediction = await Prediction.findOne({
+        date: { $gte: today.toDate(), $lt: moment(today).endOf('day').toDate() }
+      }).exec();
+      return prediction || null;
+    } catch (error) {
+      console.error('Erreur lors de la recherche de la prédiction :', error);
+      throw error;
+    }
+  }
+  
 
   
 
