@@ -6,21 +6,21 @@ const generatePDFBuffer = require('../helpers/pdfGenerator');
 
 async function handlePaymentSuccess(req, res, client) {
   try {
-    const {user,phone,operator_transaction_id,item_ref,amount,first_name,operator} = req.body;
+    const {user,phone,operator_transaction_id,item_ref,amount,first_name,last_name,email,operator} = req.body;
     const dateSubscription = moment().format('YYYY-MM-DD');
     const expirationDate = moment(dateSubscription).add(first_name, 'days');
     const formattedExpirationDate = expirationDate.format('YYYY-MM-DD');
     const successMessage = `Félicitations ! Votre paiement pour le forfait ${item_ref} a été effectué avec succès. Profitez de nos services premium ! Ci-joint la facture de paiement du forfait.`;
-    const pdfBuffer = await generatePDFBuffer(user,phone,operator_transaction_id,item_ref,operator,amount,first_name);
+    const pdfBuffer = await generatePDFBuffer(user,phone,operator_transaction_id,item_ref,operator,amount,first_name,last_name,email);
     const pdfBase64 = pdfBuffer.toString('base64');
     const pdfName = 'invoice.pdf';
     const documentType = 'application/pdf';
     const prediction = await findActivePrediction();
-    const message = prediction ? prediction.predictions : successMessage;
+    const messagePrediction = prediction ? prediction.predictions : successMessage;
     await Promise.all([
       sendMediaToNumber(client, `${user}@c\.us`, documentType, pdfBase64, pdfName),
       addSubscriptionToUser(user, item_ref, dateSubscription, formattedExpirationDate),
-      sendMessageToNumber(client, `${user}@c\.us`, message),
+      sendMessageToNumber(client, `${user}@c\.us`, messagePrediction),
     ]);
     res.status(200).send('Success');
   } catch (error) {

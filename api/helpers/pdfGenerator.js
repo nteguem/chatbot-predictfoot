@@ -3,18 +3,18 @@ const axios = require('axios');
 const moment = require('moment');
 require('moment/locale/fr'); // Importez la localisation française
 
-async function generatePDFBuffer(user,phone,idTransaction,forfait,operator,amount,due) {
+async function generatePDFBuffer(user,phone,idTransaction,forfait,operator,amount,due,logo,background_logo) {
   return new Promise(async (resolve, reject) => {
     const doc = new PDFDocument();
 
     // Load the watermark image
-    const watermarkResponse = await axios.get('https://res.cloudinary.com/nwccompany/image/upload/v1691058952/PredictFoot_icon_ib9dvl.png', {
+    const watermarkResponse = await axios.get(background_logo, {
       responseType: 'arraybuffer' // Set response type to 'arraybuffer'
     });
     const watermarkImage = Buffer.from(watermarkResponse.data);
 
     // Load the logo image
-    const logoResponse = await axios.get("https://res.cloudinary.com/nwccompany/image/upload/v1691058974/PredictFoot_logo_2x-100_ikyqby.jpg", {
+    const logoResponse = await axios.get(logo, {
       responseType: 'arraybuffer' // Set response type to 'arraybuffer'
     });
     const logoImage = Buffer.from(logoResponse.data);

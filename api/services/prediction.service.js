@@ -26,9 +26,6 @@ async function findActivePrediction() {
     }
   }
   
-
-  
-
 module.exports = {
   createPrediction,
   findActivePrediction,

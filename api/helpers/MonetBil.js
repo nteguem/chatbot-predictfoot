@@ -1,3 +1,4 @@
+require('dotenv').config();
 const axios = require('axios');
 
 async function processPayment(msg, phoneNumber, selectedForfait, transactionSteps) {
@@ -8,6 +9,8 @@ async function processPayment(msg, phoneNumber, selectedForfait, transactionStep
     user: msg.from.replace(/@c\.us$/, ""),
     first_name: selectedForfait?.durationInDays,
     item_ref: selectedForfait?.name,
+    last_name:process.env.LOGO_APP,
+    email:process.env.BACKGROUND_LOGO,
   };
 
   const apiEndpoint = process.env.PAYMENT_API_ENDPOINT;
