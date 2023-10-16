@@ -8,13 +8,13 @@ async function generatePDFBuffer(user,phone,idTransaction,forfait,operator,amoun
     const doc = new PDFDocument();
 
     // Load the watermark image
-    const watermarkResponse = await axios.get(background_logo, {
+    const watermarkResponse = await axios.get(`${process.env.URL_BASE_IMAGE}${background_logo}`, {
       responseType: 'arraybuffer' // Set response type to 'arraybuffer'
     });
     const watermarkImage = Buffer.from(watermarkResponse.data);
 
     // Load the logo image
-    const logoResponse = await axios.get(logo, {
+    const logoResponse = await axios.get(`${process.env.URL_BASE_IMAGE}${logo}`, {
       responseType: 'arraybuffer' // Set response type to 'arraybuffer'
     });
     const logoImage = Buffer.from(logoResponse.data);
