@@ -1,3 +1,4 @@
+require('dotenv').config();
 const PDFDocument = require('pdfkit');
 const axios = require('axios');
 const moment = require('moment');
